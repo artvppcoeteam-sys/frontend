@@ -147,10 +147,10 @@ export function Sidebar({ activeSection, onNavigate, className }: SidebarProps) 
             <div className="lg:hidden mb-4">
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                     <SheetTrigger asChild>
-                        <Button variant="outline" className="w-full justify-between">
-                            <span className="flex items-center gap-2">
+                        <Button variant="outline" className="w-full justify-between bg-white shadow-sm border-gray-200">
+                            <span className="flex items-center gap-2 text-gray-900">
                                 <MoreHorizontal className="w-4 h-4" />
-                                Menu
+                                <span className="font-medium">Dashboard Menu</span>
                             </span>
                             <Avatar className="w-6 h-6 ml-2">
                                 <AvatarFallback className="text-xs bg-[#D4AF37] text-white">

@@ -39,7 +39,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
   ];
 
   const timeline = [
-    { year: '2021', event: 'Kalavpp Founded', description: 'Started with a vision to connect artists with art lovers' },
+    { year: '2021', event: 'Artvpp Founded', description: 'Started with a vision to connect artists with art lovers' },
     { year: '2022', event: '100 Artists Onboarded', description: 'Reached our first milestone of partnering with talented artists' },
     { year: '2023', event: 'Launched Custom Commissions', description: 'Introduced personalized artwork services' },
     { year: '2024', event: 'Expanded to Digital Art', description: 'Added digital downloads and NFT marketplace' },
@@ -60,7 +60,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-5xl md:text-6xl mb-6 text-gray-900" style={{ fontFamily: 'Playfair Display, serif' }}>
-              About <span className="text-[#D4AF37]">KALAVPP</span>
+              About <span className="text-[#D4AF37]">Artvpp</span>
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-[#D4AF37] to-[#8B4049] mx-auto mb-8" />
             <p className="text-xl text-gray-600 leading-relaxed">
@@ -153,7 +153,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
               Our Core Values
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              The principles that guide everything we do at Kalavpp
+              The principles that guide everything we do at Artvpp
             </p>
           </motion.div>
 

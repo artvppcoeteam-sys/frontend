@@ -60,6 +60,7 @@ interface AppContextType {
   updateCheckoutState: (updates: Partial<CheckoutState>) => void;
   orders: Order[];
   addOrder: (order: Omit<Order, 'id' | 'date' | 'status' | 'deliveryDate'>) => void;
+  loginWithGoogle: () => void;
 }
 
 // Create context with a default value that will be overridden by the provider
@@ -91,7 +92,8 @@ const defaultContextValue: AppContextType = {
   },
   updateCheckoutState: () => { },
   orders: [],
-  addOrder: () => { }
+  addOrder: () => { },
+  loginWithGoogle: () => { }
 };
 
 const AppContext = createContext<AppContextType>(defaultContextValue);
@@ -225,6 +227,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const loginWithGoogle = () => {
+    // Mock Google Login
+    setUser({
+      id: 'google-user-123',
+      name: 'Google User',
+      email: 'google.user@gmail.com',
+      role: 'customer',
+      avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIq8d9x7_tO_wZ3y4F_u_v8Z9x7_tO_wZ3y4F_u_v8Z=s96-c'
+    });
+    // Store in local storage to persist
+    localStorage.setItem('artvpp-user', JSON.stringify({
+      id: 'google-user-123',
+      name: 'Google User',
+      email: 'google.user@gmail.com',
+      role: 'customer',
+      avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIq8d9x7_tO_wZ3y4F_u_v8Z9x7_tO_wZ3y4F_u_v8Z=s96-c'
+    }));
+  };
+
   const logout = () => {
     setUser(null);
   };
@@ -265,7 +286,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       checkoutState,
       updateCheckoutState,
       orders,
-      addOrder
+      addOrder,
+      loginWithGoogle
     }}>
       {children}
     </AppContext.Provider>

@@ -418,7 +418,18 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                       variant="outline"
                       className="w-full justify-start gap-3"
                       onClick={() => {
-                        onNavigate('my-orders');
+                        onNavigate('profile');
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <User className="w-4 h-4" />
+                      My Profile
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-3"
+                      onClick={() => {
+                        onNavigate('orders');
                         setMobileMenuOpen(false);
                       }}
                     >

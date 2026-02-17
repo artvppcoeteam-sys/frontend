@@ -22,6 +22,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
   const [selectedSize, setSelectedSize] = useState('original');
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   const product = allProducts.find(p => p.id === productId);
 
@@ -96,38 +97,46 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {/* Main Image */}
-            <div className="aspect-[3/4] bg-gray-100 overflow-hidden mb-6 relative group sticky top-24">
-              <img
-                src={images[selectedImage]}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
-
-              {/* Wishlist Button */}
-              <button
-                onClick={() => {
-                  setIsWishlisted(!isWishlisted);
-                  toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
-                }}
-                className="absolute top-6 right-6 bg-white rounded-full p-4 shadow-lg hover:bg-gray-100 transition-colors"
+            {/* Sticky Wrapper for Images */}
+            <div className="sticky top-24 space-y-4">
+              {/* Main Image */}
+              <div
+                className={`aspect-[3/4] bg-gray-100 overflow-hidden relative group cursor-zoom-in ${isZoomed ? 'cursor-zoom-out' : ''}`}
+                onDoubleClick={() => setIsZoomed(!isZoomed)}
               >
-                <Heart className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-900'}`} />
-              </button>
-            </div>
+                <motion.img
+                  src={images[selectedImage]}
+                  alt={product.title}
+                  className="w-full h-full object-cover transition-transform duration-300"
+                  animate={{ scale: isZoomed ? 2 : 1 }}
+                />
 
-            {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-3 gap-4">
-              {images.map((image, index) => (
+                {/* Wishlist Button */}
                 <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`aspect-square overflow-hidden bg-gray-100 border-2 transition-all ${selectedImage === index ? 'border-gray-900' : 'border-transparent hover:border-gray-300'
-                    }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsWishlisted(!isWishlisted);
+                    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+                  }}
+                  className="absolute top-6 right-6 bg-white rounded-full p-4 shadow-lg hover:bg-gray-100 transition-colors z-10"
                 >
-                  <img src={image} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
+                  <Heart className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-900'}`} />
                 </button>
-              ))}
+              </div>
+
+              {/* Thumbnail Gallery */}
+              <div className="grid grid-cols-3 gap-4">
+                {images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`aspect-square overflow-hidden bg-gray-100 border-2 transition-all rounded-lg ${selectedImage === index ? 'border-gray-900' : 'border-transparent hover:border-gray-300'
+                      }`}
+                  >
+                    <img src={image} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
 
@@ -231,7 +240,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
               <Button
                 size="lg"
                 onClick={handleAddToCart}
-                className="w-full bg-[#D4AF37] hover:bg-[#C19B2A] text-white py-7 text-lg rounded-none font-medium tracking-wide"
+                className="w-full bg-[#D4AF37] hover:bg-[#C19B2A] text-white py-7 text-lg rounded-xl font-medium tracking-wide"
               >
                 <ShoppingBag className="mr-3 h-5 w-5" />
                 ADD TO CART
@@ -244,7 +253,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
                   handleAddToCart();
                   onNavigate('checkout');
                 }}
-                className="w-full border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white py-7 text-lg rounded-none font-medium tracking-wide"
+                className="w-full border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white py-7 text-lg rounded-xl font-medium tracking-wide"
               >
                 BUY NOW
               </Button>
