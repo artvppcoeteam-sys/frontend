@@ -1,10 +1,6 @@
 import { Package, RefreshCw, Clock, Mail, Phone, CheckCircle, AlertCircle } from 'lucide-react';
 
-interface ReturnsRefundsPageProps {
-    onNavigate?: (page: string) => void;
-}
-
-export function ReturnsRefundsPage({ onNavigate }: ReturnsRefundsPageProps) {
+export function ReturnsRefundsPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}

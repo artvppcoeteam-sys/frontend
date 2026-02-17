@@ -10,9 +10,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { motion } from 'motion/react';
 
-interface HelpPageProps {
-  onNavigate: (page: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
+
+
 
 const faqCategories = [
   {
@@ -162,7 +162,8 @@ const quickLinks = [
   { icon: Shield, title: 'Privacy & Security', description: 'How we protect your data', page: 'contact' }
 ];
 
-export function HelpPage({ onNavigate }: HelpPageProps) {
+export function HelpPage() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('general');
 
@@ -222,7 +223,11 @@ export function HelpPage({ onNavigate }: HelpPageProps) {
                 transition={{ delay: 0.1 + index * 0.05 }}
               >
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => {
-                  if (link.page) onNavigate(link.page);
+                  if (link.page) {
+                    if (link.page === 'orders') navigate('/dashboard/user/orders');
+                    else if (link.page === 'contact') navigate('/contact');
+                    else navigate(`/${link.page}`);
+                  }
                   else if (link.category) setSelectedCategory(link.category);
                 }}>
                   <CardContent className="pt-6 text-center">
@@ -327,7 +332,7 @@ export function HelpPage({ onNavigate }: HelpPageProps) {
               </div>
 
               <div className="text-center mt-8">
-                <Button onClick={() => onNavigate('contact')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
+                <Button onClick={() => navigate('/contact')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
                   Contact Support Team
                 </Button>
               </div>

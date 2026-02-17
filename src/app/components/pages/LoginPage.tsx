@@ -7,12 +7,10 @@ import { Label } from '../ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { useApp } from '../../context/AppContext';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
-interface LoginPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function LoginPage({ onNavigate }: LoginPageProps) {
+export function LoginPage() {
+  const navigate = useNavigate();
   const { setUser, loginWithGoogle } = useApp();
   const [loginData, setLoginData] = useState({
     email: '',
@@ -35,11 +33,11 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
 
     // Navigate based on role
     if (role === 'admin') {
-      onNavigate('admin-dashboard');
+      navigate('/admin');
     } else if (role === 'vendor') {
-      onNavigate('vendor-dashboard');
+      navigate('/vendor');
     } else {
-      onNavigate('home');
+      navigate('/');
     }
   };
 
@@ -73,7 +71,7 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
                     onClick={() => {
                       loginWithGoogle();
                       toast.success('Generated Google session!');
-                      setTimeout(() => onNavigate('home'), 500);
+                      setTimeout(() => navigate('/'), 500);
                     }}
                   >
                     {/* Google Icon SVG */}
@@ -159,7 +157,7 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
                     Don't have an account?{' '}
                     <button
                       type="button"
-                      onClick={() => onNavigate('register')}
+                      onClick={() => navigate('/register')}
                       className="text-[#D4AF37] hover:underline"
                     >
                       Sign up
@@ -222,7 +220,7 @@ export function LoginPage({ onNavigate }: LoginPageProps) {
                     Want to sell your art?{' '}
                     <button
                       type="button"
-                      onClick={() => onNavigate('register')}
+                      onClick={() => navigate('/register')}
                       className="text-[#8B4049] hover:underline"
                     >
                       Register as vendor

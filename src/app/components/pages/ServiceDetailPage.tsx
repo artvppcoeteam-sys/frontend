@@ -10,13 +10,11 @@ import { Badge } from '../ui/badge';
 import { services } from '../../data/mockData';
 import { toast } from 'sonner';
 import { motion } from 'motion/react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-interface ServiceDetailPageProps {
-  serviceId: string | null;
-  onNavigate: (page: string) => void;
-}
-
-export function ServiceDetailPage({ serviceId, onNavigate }: ServiceDetailPageProps) {
+export function ServiceDetailPage() {
+  const { id: serviceId } = useParams();
+  const navigate = useNavigate();
   const service = services.find(s => s.id === serviceId);
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +31,7 @@ export function ServiceDetailPage({ serviceId, onNavigate }: ServiceDetailPagePr
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Service not found</h2>
-          <Button onClick={() => onNavigate('services')}>Back to Services</Button>
+          <Button onClick={() => navigate('/services')}>Back to Services</Button>
         </div>
       </div>
     );
@@ -64,14 +62,14 @@ export function ServiceDetailPage({ serviceId, onNavigate }: ServiceDetailPagePr
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center text-sm text-gray-500">
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => navigate('/')}
               className="hover:text-[#D4AF37] transition-colors"
             >
               Home
             </button>
             <span className="mx-2">/</span>
             <button
-              onClick={() => onNavigate('services')}
+              onClick={() => navigate('/services')}
               className="hover:text-[#D4AF37] transition-colors"
             >
               Services

@@ -11,12 +11,10 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Input } from '../ui/input';
 import { allProducts } from '../../data/mockData';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
-interface ProductCategoryPageProps {
-  onNavigate: (page: string, productId?: string) => void;
-}
-
-export function ProductCategoryPage({ onNavigate }: ProductCategoryPageProps) {
+export function ProductCategoryPage() {
+  const navigate = useNavigate();
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [selectedMediums, setSelectedMediums] = useState<string[]>([]);
   const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
@@ -336,7 +334,7 @@ export function ProductCategoryPage({ onNavigate }: ProductCategoryPageProps) {
                     transition={{ delay: index * 0.05 }}
                     whileHover={{ y: -8 }}
                     className="group cursor-pointer"
-                    onClick={() => onNavigate('product-detail', product.id)}
+                    onClick={() => navigate(`/product/${product.id}`)}
                   >
                     {viewMode === 'grid' ? (
                       <div>

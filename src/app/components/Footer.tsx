@@ -1,13 +1,25 @@
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/artvpplogo.png';
 
-interface FooterProps {
-  onNavigate: (page: string) => void;
-}
-
-export function Footer({ onNavigate }: FooterProps) {
+export function Footer() {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+
+  const handleNavigation = (id: string) => {
+    switch (id) {
+      case 'shop': navigate('/marketplace'); break;
+      case 'services': navigate('/services'); break;
+      case 'about': navigate('/about'); break;
+      case 'sell': navigate('/sell'); break;
+      case 'contact': navigate('/contact'); break;
+      case 'privacy': navigate('/privacy'); break;
+      case 'terms': navigate('/terms'); break;
+      case 'help': navigate('/help'); break;
+      default: navigate('/');
+    }
+  };
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -75,7 +87,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   whileHover={{ x: 3 }}
                   className="hover:text-[#D4AF37] transition-colors cursor-pointer"
                 >
-                  <button onClick={() => onNavigate(item.id)} className="hover:text-[#D4AF37] transition-colors inline-block hover:translate-x-1 transition-transform text-left">
+                  <button onClick={() => handleNavigation(item.id)} className="hover:text-[#D4AF37] transition-colors inline-block hover:translate-x-1 transition-transform text-left">
                     {item.name}
                   </button>
                 </motion.li>
@@ -103,7 +115,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   whileHover={{ x: 3 }}
                   className="hover:text-[#D4AF37] transition-colors cursor-pointer"
                 >
-                  <button onClick={() => onNavigate(item.id)} className="hover:text-[#D4AF37] transition-colors inline-block hover:translate-x-1 transition-transform text-left">
+                  <button onClick={() => handleNavigation(item.id)} className="hover:text-[#D4AF37] transition-colors inline-block hover:translate-x-1 transition-transform text-left">
                     {item.name}
                   </button>
                 </motion.li>

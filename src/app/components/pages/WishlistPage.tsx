@@ -6,10 +6,7 @@ import { Badge } from '../ui/badge';
 import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../../context/AppContext';
 import { toast } from 'sonner';
-
-interface WishlistPageProps {
-  onNavigate: (page: string, id?: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 const mockWishlistItems = [
   {
@@ -74,7 +71,8 @@ const mockWishlistItems = [
   }
 ];
 
-export function WishlistPage({ onNavigate }: WishlistPageProps) {
+export function WishlistPage() {
+  const navigate = useNavigate();
   const { user, addToCart } = useApp();
   const [wishlistItems, setWishlistItems] = useState(mockWishlistItems);
 
@@ -127,7 +125,7 @@ export function WishlistPage({ onNavigate }: WishlistPageProps) {
               <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h2 className="text-2xl font-bold mb-2">Access Denied</h2>
               <p className="text-gray-600 mb-6">Please log in to view your wishlist</p>
-              <Button onClick={() => onNavigate('login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
+              <Button onClick={() => navigate('/login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
                 Go to Login
               </Button>
             </div>
@@ -246,7 +244,7 @@ export function WishlistPage({ onNavigate }: WishlistPageProps) {
                 <p className="text-gray-600 mb-8">
                   Save your favorite items here to keep track of them
                 </p>
-                <Button onClick={() => onNavigate('shop')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
+                <Button onClick={() => navigate('/marketplace')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
                   Start Shopping
                 </Button>
               </CardContent>
@@ -289,7 +287,7 @@ export function WishlistPage({ onNavigate }: WishlistPageProps) {
                             size="sm"
                             variant="secondary"
                             className="gap-2"
-                            onClick={() => onNavigate('product-detail', item.id)}
+                            onClick={() => navigate(`/product/${item.id}`)}
                           >
                             <Eye className="w-4 h-4" />
                             View
@@ -366,7 +364,7 @@ export function WishlistPage({ onNavigate }: WishlistPageProps) {
               <CardContent className="pt-6">
                 <h3 className="font-semibold text-lg mb-2">Looking for More?</h3>
                 <p className="text-gray-600 mb-4">Discover more amazing art pieces</p>
-                <Button onClick={() => onNavigate('shop')} variant="outline">
+                <Button onClick={() => navigate('/marketplace')} variant="outline">
                   Continue Shopping
                 </Button>
               </CardContent>

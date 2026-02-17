@@ -5,12 +5,10 @@ import { Badge } from '../ui/badge';
 import { services } from '../../data/mockData';
 import { motion } from 'motion/react';
 import { useApp } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
-interface ServicesPageProps {
-  onNavigate?: (page: string, id?: string) => void;
-}
-
-export function ServicesPage({ onNavigate }: ServicesPageProps) {
+export function ServicesPage() {
+  const navigate = useNavigate();
   const { } = useApp();
 
   return (
@@ -85,7 +83,7 @@ export function ServicesPage({ onNavigate }: ServicesPageProps) {
                     </div>
 
                     <Button
-                      onClick={() => onNavigate?.('service-detail', service.id)}
+                      onClick={() => navigate(`/service/${service.id}`)}
                       className="w-full bg-gradient-to-r from-[#D4AF37] to-[#8B4049] hover:from-[#8B4049] hover:to-[#D4AF37] text-white py-6 text-base rounded-full font-medium tracking-wide shadow-md group-hover:shadow-lg transition-all"
                     >
                       VIEW DETAILS

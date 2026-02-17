@@ -18,12 +18,10 @@ import { motion } from 'motion/react';
 import { useApp } from '../../context/AppContext';
 import { toast } from 'sonner';
 import { Alert, AlertDescription } from '../ui/alert';
+import { useNavigate } from 'react-router-dom';
 
-interface SettingsPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function SettingsPage({ onNavigate }: SettingsPageProps) {
+export function SettingsPage() {
+  const navigate = useNavigate();
   const { user, logout } = useApp();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -117,7 +115,7 @@ export function SettingsPage({ onNavigate }: SettingsPageProps) {
       toast.error('Account deletion requested. You will receive a confirmation email.');
       setTimeout(() => {
         logout();
-        onNavigate('home');
+        navigate('/');
       }, 2000);
     }
   };
@@ -131,7 +129,7 @@ export function SettingsPage({ onNavigate }: SettingsPageProps) {
             <CardDescription>Please log in to access settings</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => onNavigate('login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
+            <Button onClick={() => navigate('/login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
               Go to Login
             </Button>
           </CardContent>

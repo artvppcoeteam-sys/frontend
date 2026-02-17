@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogOut, Settings, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogOut, LayoutDashboard, ShoppingBag } from 'lucide-react';
 import logo from '../../assets/artvpplogo.png';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Badge } from './ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,23 +10,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from './ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useApp } from '../context/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { navigationMenu } from '../data/mockData';
 import { toast } from 'sonner';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-interface HeaderProps {
-  onNavigate: (page: string, id?: string) => void;
-  currentPage: string;
-}
-
-export function Header({ onNavigate, currentPage }: HeaderProps) {
-  const { user, cartCount, logout, loginAsAdmin, loginAsVendor, loginAsCustomer } = useApp();
+export function Header() {
+  const { user, cartCount, logout } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,29 +35,20 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
   }, []);
 
   const navItems = [
-    { label: 'ABOUT ARTVPP', value: 'about', hasDropdown: false },
-    { label: 'BUY ART', value: 'shop', subLabel: 'SHOP', hasDropdown: true },
-    { label: 'SELL ART', value: 'sell', subLabel: 'SELL', hasDropdown: false },
-    { label: 'DISCOVER', value: 'discover', subLabel: 'DISCOVER', hasDropdown: true },
+    { label: 'ABOUT ARTVPP', value: 'about', path: '/about', hasDropdown: false },
+    { label: 'BUY ART', value: 'shop', path: '/marketplace', subLabel: 'SHOP', hasDropdown: true },
+    { label: 'SELL ART', value: 'sell', path: '/sell', subLabel: 'SELL', hasDropdown: false },
+    { label: 'DISCOVER', value: 'discover', path: '/discover', subLabel: 'DISCOVER', hasDropdown: true },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      onNavigate('shop');
-      console.log('Searching for:', searchQuery);
+      navigate(`/marketplace?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
-  const handleMouseEnter = (value: string, hasDropdown: boolean) => {
-    if (hasDropdown) {
-      setActiveDropdown(value);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setActiveDropdown(null);
-  };
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <motion.header
@@ -76,7 +64,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
           {/* Logo Section - Left */}
           <div className="flex items-center justify-start">
             <motion.button
-              onClick={() => onNavigate('home')}
+              onClick={() => navigate('/')}
               className="group relative flex items-center gap-1.5"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -104,13 +92,13 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                     if (item.hasDropdown) {
                       setActiveDropdown(activeDropdown === item.value ? null : item.value);
                     } else {
-                      onNavigate(item.value);
+                      navigate(item.path);
                       setActiveDropdown(null);
                     }
                   }}
                   className="flex flex-col items-center py-2"
                 >
-                  <span className={`text-sm lg:text-base font-medium tracking-widest uppercase transition-colors whitespace-nowrap ${currentPage === item.value || (activeDropdown === item.value)
+                  <span className={`text-sm lg:text-base font-medium tracking-widest uppercase transition-colors whitespace-nowrap ${isActive(item.path) || (activeDropdown === item.value)
                     ? 'text-[#D4AF37]'
                     : 'text-gray-900 hover:text-[#D4AF37]'
                     }`}>
@@ -142,7 +130,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                                     <li key={subIdx}>
                                       <button
                                         onClick={() => {
-                                          onNavigate('shop');
+                                          navigate('/marketplace');
                                           setActiveDropdown(null);
                                         }}
                                         className="text-sm text-gray-600 hover:text-[#D4AF37] transition-colors font-light block py-1"
@@ -166,11 +154,10 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                                       <button
                                         onClick={() => {
                                           if (subItem.link === 'services') {
-                                            onNavigate('services');
+                                            navigate('/services');
                                           } else {
-                                            // Extract ID if present (e.g. from "service-detail?id=service-1")
                                             const id = (subItem as any).id || (subItem.link.includes('?id=') ? subItem.link.split('?id=')[1] : undefined);
-                                            onNavigate('service-detail', id);
+                                            navigate(id ? `/service/${id}` : '/services');
                                           }
                                           setActiveDropdown(null);
                                         }}
@@ -204,28 +191,36 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onNavigate('profile')}>My Profile</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard/user/profile')}>My Profile</DropdownMenuItem>
                     {user.role === 'admin' && (
-                      <DropdownMenuItem onClick={() => onNavigate('admin-dashboard')}>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/admin')}>
                         Admin Dashboard
                       </DropdownMenuItem>
                     )}
+                    {user.role === 'vendor' && (
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/vendor')}>
+                        Vendor Dashboard
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      logout();
+                      navigate('/login');
+                    }}>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <>
-                  <button onClick={() => onNavigate('join')} className="hover:text-[#D4AF37] transition-colors uppercase whitespace-nowrap">
+                  <button onClick={() => navigate('/register')} className="hover:text-[#D4AF37] transition-colors uppercase whitespace-nowrap">
                     JOIN
                   </button>
-                  <button onClick={() => onNavigate('login')} className="hover:text-[#D4AF37] transition-colors uppercase whitespace-nowrap">
+                  <button onClick={() => navigate('/login')} className="hover:text-[#D4AF37] transition-colors uppercase whitespace-nowrap">
                     LOGIN
                   </button>
                 </>
               )}
 
-              <button onClick={() => onNavigate('cart')} className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors uppercase group whitespace-nowrap">
+              <button onClick={() => navigate('/cart')} className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors uppercase group whitespace-nowrap">
                 <div className="relative">
                   <ShoppingCart className="w-5 h-5 text-gray-800 group-hover:text-[#D4AF37] transition-colors" />
                   {cartCount > 0 && (
@@ -271,8 +266,6 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
             </Button>
           </div>
         </div>
-
-        {/* Mobile Search - Only visible when menu is open or can be toggled */}
       </div>
 
       {/* Mobile Navigation Menu */}
@@ -307,7 +300,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                       if (item.hasDropdown) {
                         setActiveDropdown(activeDropdown === item.value ? null : item.value);
                       } else {
-                        onNavigate(item.value);
+                        navigate(item.path);
                         setMobileMenuOpen(false);
                       }
                     }}
@@ -341,13 +334,13 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                                     <button
                                       onClick={() => {
                                         if (item.value === 'shop') {
-                                          onNavigate('shop');
+                                          navigate('/marketplace');
                                         } else {
                                           if (subItem.link === 'services') {
-                                            onNavigate('services');
+                                            navigate('/services');
                                           } else {
                                             const id = (subItem as any).id || (subItem.link.includes('?id=') ? subItem.link.split('?id=')[1] : undefined);
-                                            onNavigate('service-detail', id);
+                                            navigate(id ? `/service/${id}` : '/services');
                                           }
                                         }
                                         setMobileMenuOpen(false);
@@ -391,7 +384,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                         variant="outline"
                         className="w-full justify-start gap-3"
                         onClick={() => {
-                          onNavigate('admin-dashboard');
+                          navigate('/dashboard/admin');
                           setMobileMenuOpen(false);
                         }}
                       >
@@ -405,7 +398,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                         variant="outline"
                         className="w-full justify-start gap-3"
                         onClick={() => {
-                          onNavigate('vendor-dashboard');
+                          navigate('/dashboard/vendor');
                           setMobileMenuOpen(false);
                         }}
                       >
@@ -418,7 +411,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                       variant="outline"
                       className="w-full justify-start gap-3"
                       onClick={() => {
-                        onNavigate('profile');
+                        navigate('/dashboard/user/profile');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -429,7 +422,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                       variant="outline"
                       className="w-full justify-start gap-3"
                       onClick={() => {
-                        onNavigate('orders');
+                        navigate('/dashboard/user/orders');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -442,6 +435,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                       onClick={() => {
                         toast.success('Logged out successfully!');
                         logout();
+                        navigate('/login');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -454,7 +448,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        onNavigate('login');
+                        navigate('/login');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -463,7 +457,7 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
                     <Button
                       className="bg-[#D4AF37] hover:bg-[#C19B2A] text-white"
                       onClick={() => {
-                        onNavigate('join');
+                        navigate('/register');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -477,6 +471,5 @@ export function Header({ onNavigate, currentPage }: HeaderProps) {
         )}
       </AnimatePresence>
     </motion.header >
-
   );
 }

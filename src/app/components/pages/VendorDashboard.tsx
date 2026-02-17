@@ -6,12 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
-interface VendorDashboardProps {
-  onNavigate: (page: string) => void;
-}
+export function VendorDashboard() {
+  const navigate = useNavigate();
 
-export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
   // Mock sales data for the chart
   const salesData = [
     { month: 'Jan', sales: 12000 },
@@ -95,20 +94,20 @@ export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
               <AreaChart data={salesData}>
                 <defs>
                   <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Area 
-                  type="monotone" 
-                  dataKey="sales" 
-                  stroke="#D4AF37" 
-                  fillOpacity={1} 
-                  fill="url(#colorSales)" 
+                <Area
+                  type="monotone"
+                  dataKey="sales"
+                  stroke="#D4AF37"
+                  fillOpacity={1}
+                  fill="url(#colorSales)"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -131,7 +130,7 @@ export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
                     <CardTitle>My Products</CardTitle>
                     <CardDescription>Manage your artwork listings</CardDescription>
                   </div>
-                  <Button className="bg-[#D4AF37] hover:bg-[#C19B2A] text-white">
+                  <Button className="bg-[#D4AF37] hover:bg-[#C19B2A] text-white" onClick={() => navigate('/vendor/products/new')}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add New Product
                   </Button>

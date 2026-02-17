@@ -1,10 +1,9 @@
 import { Home, Search, ShoppingBag, Palette, ArrowLeft } from 'lucide-react';
 
-interface NotFoundPageProps {
-  onNavigate?: (page: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
-export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
+export function NotFoundPage() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16">
       <div className="max-w-2xl mx-auto text-center">
@@ -26,7 +25,7 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
             Page Not Found
           </h2>
           <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Oops! The page you're looking for seems to have wandered off into the gallery. 
+            Oops! The page you're looking for seems to have wandered off into the gallery.
             Let's get you back on track.
           </p>
         </div>
@@ -34,15 +33,15 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
-            onClick={() => onNavigate?.('home')}
+            onClick={() => navigate('/')}
             className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#D4AF37] to-[#C9A858] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             <Home className="w-5 h-5" />
             Back to Home
           </button>
-          
+
           <button
-            onClick={() => onNavigate?.('shop')}
+            onClick={() => navigate('/marketplace')}
             className="group inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-[#D4AF37] text-[#D4AF37] rounded-full font-semibold hover:bg-[#D4AF37] hover:text-white transition-all duration-300"
           >
             <ShoppingBag className="w-5 h-5" />
@@ -57,31 +56,31 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button
-              onClick={() => onNavigate?.('shop')}
+              onClick={() => navigate('/marketplace')}
               className="p-4 rounded-lg border border-gray-200 hover:border-[#D4AF37] hover:shadow-md transition-all duration-300 group"
             >
               <ShoppingBag className="w-6 h-6 mx-auto mb-2 text-[#8B4049] group-hover:text-[#D4AF37] transition-colors" />
               <span className="text-sm font-medium text-gray-700">Shop</span>
             </button>
-            
+
             <button
-              onClick={() => onNavigate?.('services')}
+              onClick={() => navigate('/services')}
               className="p-4 rounded-lg border border-gray-200 hover:border-[#D4AF37] hover:shadow-md transition-all duration-300 group"
             >
               <Palette className="w-6 h-6 mx-auto mb-2 text-[#8B4049] group-hover:text-[#D4AF37] transition-colors" />
               <span className="text-sm font-medium text-gray-700">Services</span>
             </button>
-            
+
             <button
-              onClick={() => onNavigate?.('about')}
+              onClick={() => navigate('/about')}
               className="p-4 rounded-lg border border-gray-200 hover:border-[#D4AF37] hover:shadow-md transition-all duration-300 group"
             >
               <Search className="w-6 h-6 mx-auto mb-2 text-[#8B4049] group-hover:text-[#D4AF37] transition-colors" />
               <span className="text-sm font-medium text-gray-700">About</span>
             </button>
-            
+
             <button
-              onClick={() => onNavigate?.('contact')}
+              onClick={() => navigate('/contact')}
               className="p-4 rounded-lg border border-gray-200 hover:border-[#D4AF37] hover:shadow-md transition-all duration-300 group"
             >
               <ArrowLeft className="w-6 h-6 mx-auto mb-2 text-[#8B4049] group-hover:text-[#D4AF37] transition-colors" />

@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import { DashboardLayout } from '../shared/DashboardLayout';
-import { VendorOverview } from './VendorOverview';
-import { VendorArtworks, VendorOrders, VendorEarnings, VendorCustomers } from './VendorComponents';
-import { VendorSettings } from './VendorPlaceholders';
 import {
     LayoutDashboard, Image as ImageIcon, ShoppingBag,
-    DollarSign, User, Settings, HelpCircle, MessageSquare, LogOut
+    DollarSign, User, Settings, HelpCircle, MessageSquare
 } from 'lucide-react';
 import { useApp } from '../../../context/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Button } from '../../ui/button';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-interface VendorDashboardProps {
-    onNavigate: (page: string) => void;
-}
-
-export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
+export function VendorDashboard() {
     const { user } = useApp();
-    const [activeSection, setActiveSection] = useState('overview');
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Derive active section from URL
+    const activeSection = location.pathname.split('/').pop() || 'overview';
+
+    // Redirect /dashboard/vendor to /dashboard/vendor/overview
+    if (location.pathname === '/dashboard/vendor' || location.pathname === '/dashboard/vendor/') {
+        navigate('/dashboard/vendor/overview', { replace: true });
+    }
 
     if (user?.role !== 'vendor' && user?.role !== 'admin') {
         return (
@@ -28,7 +31,7 @@ export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
                         <CardDescription>This area is for Vendors/Artists only.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button onClick={() => onNavigate('home')} className="w-full">
+                        <Button onClick={() => navigate('/')} className="w-full">
                             Return Home
                         </Button>
                     </CardContent>
@@ -41,52 +44,43 @@ export function VendorDashboard({ onNavigate }: VendorDashboardProps) {
         {
             title: 'MAIN',
             items: [
-                { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-                { id: 'artworks', label: 'My Artworks', icon: ImageIcon },
-                { id: 'add-artwork', label: 'Add New Artwork', icon: ImageIcon, path: '/add-artwork' }, // Logical placeholder
-                { id: 'orders', label: 'Orders', icon: ShoppingBag },
+                { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/dashboard/vendor/overview' },
+                { id: 'artworks', label: 'My Artworks', icon: ImageIcon, path: '/dashboard/vendor/artworks' },
+                { id: 'add-artwork', label: 'Add New Artwork', icon: ImageIcon, path: '/dashboard/vendor/add-artwork' },
+                { id: 'orders', label: 'Orders', icon: ShoppingBag, path: '/dashboard/vendor/orders' },
             ]
         },
         {
             title: 'FINANCE',
             items: [
-                { id: 'earnings', label: 'Earnings / Revenue', icon: DollarSign },
-                { id: 'payouts', label: 'Payouts (Coming Soon)', icon: DollarSign },
+                { id: 'earnings', label: 'Earnings / Revenue', icon: DollarSign, path: '/dashboard/vendor/earnings' },
+                { id: 'payouts', label: 'Payouts (Coming Soon)', icon: DollarSign, path: '/dashboard/vendor/payouts' },
             ]
         },
         {
             title: 'ACCOUNT',
             items: [
-                { id: 'customers', label: 'Customers', icon: User },
-                { id: 'messages', label: 'Messages', icon: MessageSquare },
-                { id: 'settings', label: 'Profile Settings', icon: Settings },
-                { id: 'support', label: 'Help & Support', icon: HelpCircle },
+                { id: 'customers', label: 'Customers', icon: User, path: '/dashboard/vendor/customers' },
+                { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/dashboard/vendor/messages' },
+                { id: 'settings', label: 'Profile Settings', icon: Settings, path: '/dashboard/vendor/settings' },
+                { id: 'support', label: 'Help & Support', icon: HelpCircle, path: '/dashboard/vendor/support' },
             ]
         }
     ];
-
-    const renderContent = () => {
-        switch (activeSection) {
-            case 'overview': return <VendorOverview />;
-            case 'artworks': return <VendorArtworks />;
-            case 'orders': return <VendorOrders />;
-            case 'earnings': return <VendorEarnings />;
-            case 'customers': return <VendorCustomers />;
-            case 'settings': return <VendorSettings />;
-            case 'add-artwork':
-                // Simple redirect simulation or inline form
-                return <VendorArtworks />; // Just show artworks for now, usually this opens a form
-            default: return <VendorOverview />;
-        }
-    };
 
     return (
         <DashboardLayout
             menuItems={menuItems}
             activeSection={activeSection}
-            onNavigate={(id) => setActiveSection(id)}
+            onNavigate={(id, path) => {
+                if (path) {
+                    navigate(path);
+                } else {
+                    navigate(`/dashboard/vendor/${id}`);
+                }
+            }}
         >
-            {renderContent()}
+            <Outlet />
         </DashboardLayout>
     );
 }

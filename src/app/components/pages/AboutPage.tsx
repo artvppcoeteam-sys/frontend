@@ -3,11 +3,10 @@ import { Award, Heart, Users, Target, Palette, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { featuredArtists } from '../../data/mockData';
 
-interface AboutPageProps {
-  onNavigate?: (page: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
-export function AboutPage({ onNavigate }: AboutPageProps) {
+export function AboutPage() {
+  const navigate = useNavigate();
   const stats = [
     { label: 'Artists', value: '500+', icon: Users },
     { label: 'Artworks Sold', value: '10,000+', icon: TrendingUp },
@@ -261,13 +260,13 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
-                onClick={() => onNavigate?.('register')}
+                onClick={() => navigate('/register')}
                 className="px-8 py-3 bg-white text-[#D4AF37] font-semibold rounded-md hover:bg-gray-100 transition-colors"
               >
                 Become a Vendor
               </button>
               <button
-                onClick={() => onNavigate?.('shop')}
+                onClick={() => navigate('/marketplace')}
                 className="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-md hover:bg-white/10 transition-colors"
               >
                 Explore Artworks

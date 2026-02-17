@@ -1,11 +1,9 @@
 import { CheckCircle, Package, Truck, MapPin, Calendar, CreditCard, Mail, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
-interface OrderConfirmationPageProps {
-    onNavigate?: (page: string) => void;
-}
-
-export function OrderConfirmationPage({ onNavigate }: OrderConfirmationPageProps) {
+export function OrderConfirmationPage() {
+    const navigate = useNavigate();
     const { cart } = useApp();
 
     // Generate mock order details
@@ -182,7 +180,7 @@ export function OrderConfirmationPage({ onNavigate }: OrderConfirmationPageProps
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
-                        onClick={() => onNavigate?.('orders')}
+                        onClick={() => navigate('/orders')}
                         className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#D4AF37] to-[#C9A858] text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                     >
                         <Package className="w-5 h-5" />
@@ -190,7 +188,7 @@ export function OrderConfirmationPage({ onNavigate }: OrderConfirmationPageProps
                     </button>
 
                     <button
-                        onClick={() => onNavigate?.('shop')}
+                        onClick={() => navigate('/marketplace')}
                         className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-[#D4AF37] text-[#D4AF37] rounded-full font-semibold hover:bg-[#D4AF37] hover:text-white transition-all duration-300"
                     >
                         Continue Shopping
@@ -205,14 +203,14 @@ export function OrderConfirmationPage({ onNavigate }: OrderConfirmationPageProps
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm">
                         <button
-                            onClick={() => onNavigate?.('contact')}
+                            onClick={() => navigate('/contact')}
                             className="flex items-center gap-2 text-[#8B4049] hover:text-[#D4AF37] transition-colors"
                         >
                             <Mail className="w-4 h-4" />
                             Contact Support
                         </button>
                         <button
-                            onClick={() => onNavigate?.('help')}
+                            onClick={() => navigate('/help')}
                             className="flex items-center gap-2 text-[#8B4049] hover:text-[#D4AF37] transition-colors"
                         >
                             <Calendar className="w-4 h-4" />

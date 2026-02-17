@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, CreditCard, Smartphone } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -11,12 +11,10 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
 import { loadRazorpayScript } from '../../utils/razorpay';
 import logo from '../../../assets/artvpplogo.png';
+import { useNavigate } from 'react-router-dom';
 
-interface CheckoutPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function CheckoutPage({ onNavigate }: CheckoutPageProps) {
+export function CheckoutPage() {
+  const navigate = useNavigate();
   const { cart, cartTotal, clearCart, user } = useApp();
   const [step, setStep] = useState<'shipping' | 'payment' | 'confirmation'>('shipping');
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
@@ -36,16 +34,22 @@ export function CheckoutPage({ onNavigate }: CheckoutPageProps) {
   const tax = cartTotal * 0.18;
   const total = cartTotal + shippingCost + tax;
 
+  useEffect(() => {
+    if (cart.length === 0 && step !== 'confirmation') {
+      navigate('/marketplace');
+    }
+  }, [cart, step, navigate]);
+
   if (cart.length === 0 && step !== 'confirmation') {
-    onNavigate('shop');
     return null;
   }
+
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!user) {
       toast.error('Please login to place an order');
-      onNavigate('login');
+      navigate('/login');
       return;
     }
 
@@ -167,7 +171,7 @@ export function CheckoutPage({ onNavigate }: CheckoutPageProps) {
             <Button
               size="lg"
               className="bg-[#D4AF37] hover:bg-[#C19B2A] text-white px-12 py-6 text-lg rounded-full"
-              onClick={() => onNavigate('home')}
+              onClick={() => navigate('/')}
             >
               Continue Shopping
             </Button>
@@ -222,7 +226,7 @@ export function CheckoutPage({ onNavigate }: CheckoutPageProps) {
                       {!user && (
                         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between">
                           <p className="text-amber-800 text-sm">You are checking out as a guest. Logging in will speed up the process.</p>
-                          <Button variant="outline" size="sm" onClick={() => onNavigate('login')}>Login</Button>
+                          <Button variant="outline" size="sm" onClick={() => navigate('/login')}>Login</Button>
                         </div>
                       )}
                       <form onSubmit={handleShippingSubmit} className="space-y-6">

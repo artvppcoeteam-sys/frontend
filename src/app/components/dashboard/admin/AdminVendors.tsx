@@ -4,11 +4,15 @@ import { Button } from '../../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
 import { Badge } from '../../ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
-import { Check, X, MessageSquare, Eye, Store } from 'lucide-react';
+import { Check, X, MessageSquare, Eye, Store, Upload, Send } from 'lucide-react';
 import { toast } from 'sonner';
-import { vendorApplications } from '../../../data/mockData'; // Assuming I can reuse or need to mock this
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../ui/dialog';
+import { Textarea } from '../../ui/textarea';
+import { Label } from '../../ui/label';
+import { Input } from '../../ui/input';
+import { vendorApplications } from '../../../data/mockData';
 
-// Re-mocking data here for self-containment if needed or extending imported data
+// Re-mocking/Extending data
 const initialVendors = [
     ...vendorApplications,
     {
@@ -27,13 +31,35 @@ export function AdminVendors() {
     const [vendors, setVendors] = useState(initialVendors);
     const [selectedVendor, setSelectedVendor] = useState<any>(null);
 
+    // Suggestion Modal State
+    const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
+    const [suggestionVendor, setSuggestionVendor] = useState<any>(null);
+    const [suggestionText, setSuggestionText] = useState('');
+    const [suggestionFile, setSuggestionFile] = useState<File | null>(null);
+
     const handleStatusChange = (id: string, newStatus: string) => {
         setVendors(vendors.map(v => v.id === id ? { ...v, status: newStatus } : v));
         toast.success(`Vendor ${newStatus === 'active' ? 'approved' : 'rejected'}`);
     };
 
-    const handleSuggestion = (id: string) => {
-        toast.info("Suggestion sent to vendor (Mock)");
+    const openSuggestionModal = (vendor: any) => {
+        setSuggestionVendor(vendor);
+        setSuggestionText('');
+        setSuggestionFile(null);
+        setIsSuggestionOpen(true);
+    };
+
+    const handleSendSuggestion = () => {
+        if (!suggestionText.trim()) {
+            toast.error("Please enter a suggestion message.");
+            return;
+        }
+
+        // Mock API call
+        console.log(`Sending suggestion to ${suggestionVendor.name}:`, suggestionText, suggestionFile);
+
+        toast.success(`Suggestion sent to ${suggestionVendor.name}`);
+        setIsSuggestionOpen(false);
     };
 
     return (
@@ -115,7 +141,7 @@ export function AdminVendors() {
                                                 </>
                                             )}
                                             {vendor.status === 'active' && (
-                                                <Button size="sm" variant="outline" onClick={() => handleSuggestion(vendor.id)}>
+                                                <Button size="sm" variant="outline" onClick={() => openSuggestionModal(vendor)}>
                                                     <MessageSquare className="w-4 h-4 mr-1" /> Suggestion
                                                 </Button>
                                             )}
@@ -131,30 +157,30 @@ export function AdminVendors() {
                 </CardContent>
             </Card>
 
-            {/* Vendor Profile Detail Modal (Mock) */}
-            {selectedVendor && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <Card className="w-full max-w-2xl bg-white animate-in zoom-in-95">
-                        <CardHeader className="flex flex-row items-start justify-between">
+            {/* Vendor Profile Detail Modal */}
+            <Dialog open={!!selectedVendor} onOpenChange={(open) => !open && setSelectedVendor(null)}>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Vendor Details</DialogTitle>
+                        <DialogDescription>Review vendor information and performance.</DialogDescription>
+                    </DialogHeader>
+                    {selectedVendor && (
+                        <div className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <Avatar className="w-16 h-16">
                                     <AvatarImage src={selectedVendor.avatar} />
                                     <AvatarFallback>{selectedVendor.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <CardTitle>{selectedVendor.name}</CardTitle>
-                                    <CardDescription>{selectedVendor.email}</CardDescription>
+                                    <h3 className="text-lg font-bold">{selectedVendor.name}</h3>
+                                    <p className="text-sm text-muted-foreground">{selectedVendor.email}</p>
                                     <div className="mt-2 flex gap-2">
                                         <Badge>{selectedVendor.specialty}</Badge>
                                         <Badge variant="outline">{selectedVendor.status}</Badge>
                                     </div>
                                 </div>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={() => setSelectedVendor(null)}>
-                                <X className="w-4 h-4" />
-                            </Button>
-                        </CardHeader>
-                        <CardContent>
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-4 bg-gray-50 rounded-lg">
                                     <h4 className="font-semibold mb-2">Detailed Info</h4>
@@ -167,8 +193,9 @@ export function AdminVendors() {
                                     <p className="text-sm text-gray-600">Products Listed: {selectedVendor.products || 0}</p>
                                 </div>
                             </div>
-                            <div className="mt-6 flex justify-end gap-2">
-                                <Button variant="outline" onClick={() => handleSuggestion(selectedVendor.id)}>
+
+                            <div className="flex justify-end gap-2">
+                                <Button variant="outline" onClick={() => { setSelectedVendor(null); openSuggestionModal(selectedVendor); }}>
                                     <MessageSquare className="w-4 h-4 mr-2" />
                                     Send Suggestion
                                 </Button>
@@ -185,10 +212,55 @@ export function AdminVendors() {
                                     <Button variant="destructive">Suspend Vendor</Button>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Suggestion Modal */}
+            <Dialog open={isSuggestionOpen} onOpenChange={setIsSuggestionOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Send Suggestion</DialogTitle>
+                        <DialogDescription>
+                            Send a suggestion or feedback to <span className="font-semibold">{suggestionVendor?.name}</span>.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="suggestion">Suggestion / Feedback</Label>
+                            <Textarea
+                                id="suggestion"
+                                placeholder="Enter your suggestion here..."
+                                className="min-h-[100px]"
+                                value={suggestionText}
+                                onChange={(e) => setSuggestionText(e.target.value)}
+                            />
+                            <div className="text-xs text-muted-foreground text-right">
+                                {suggestionText.length} characters
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="file">Attachment (Optional)</Label>
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    id="file"
+                                    type="file"
+                                    className="cursor-pointer"
+                                    onChange={(e) => setSuggestionFile(e.target.files?.[0] || null)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setIsSuggestionOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSendSuggestion} className="bg-green-600 hover:bg-green-700 text-white">
+                            <Send className="w-4 h-4 mr-2" />
+                            Send Suggestion
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

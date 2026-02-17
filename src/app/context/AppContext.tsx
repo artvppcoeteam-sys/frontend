@@ -99,20 +99,18 @@ const defaultContextValue: AppContextType = {
 const AppContext = createContext<AppContextType>(defaultContextValue);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>({
-    id: 'dummy-user-123',
-    name: 'Artvpp User',
-    email: 'user@artvpp.com',
-    role: 'customer',
-    avatar: 'https://github.com/shadcn.png'
-  });
+  const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load cart and orders from localStorage
+  // Load user, cart and orders from localStorage
   useEffect(() => {
     try {
+      const savedUser = localStorage.getItem('artvpp-user');
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
       const savedCart = localStorage.getItem('artvpp-cart');
       if (savedCart) {
         setCart(JSON.parse(savedCart));
@@ -198,56 +196,58 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const loginAsCustomer = () => {
-    setUser({
+    const customerUser: User = {
       id: 'customer-123',
       name: 'John Doe',
       email: 'john@example.com',
       role: 'customer',
       avatar: 'https://github.com/shadcn.png'
-    });
+    };
+    setUser(customerUser);
+    localStorage.setItem('artvpp-user', JSON.stringify(customerUser));
   };
 
   const loginAsVendor = () => {
-    setUser({
+    const vendorUser: User = {
       id: 'vendor-456',
       name: 'Artist A',
       email: 'artist@artvpp.com',
       role: 'vendor',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100'
-    });
+    };
+    setUser(vendorUser);
+    localStorage.setItem('artvpp-user', JSON.stringify(vendorUser));
   };
 
   const loginAsAdmin = () => {
-    setUser({
+    const adminUser: User = {
       id: 'admin-789',
       name: 'Dr. Satyamangal Rege',
       email: 'admin@artvpp.com',
       role: 'admin',
       avatar: 'https://github.com/shadcn.png'
-    });
+    };
+    setUser(adminUser);
+    localStorage.setItem('artvpp-user', JSON.stringify(adminUser));
   };
 
   const loginWithGoogle = () => {
     // Mock Google Login
-    setUser({
+    const googleUser: User = {
       id: 'google-user-123',
       name: 'Google User',
       email: 'google.user@gmail.com',
       role: 'customer',
       avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIq8d9x7_tO_wZ3y4F_u_v8Z9x7_tO_wZ3y4F_u_v8Z=s96-c'
-    });
+    };
+    setUser(googleUser);
     // Store in local storage to persist
-    localStorage.setItem('artvpp-user', JSON.stringify({
-      id: 'google-user-123',
-      name: 'Google User',
-      email: 'google.user@gmail.com',
-      role: 'customer',
-      avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIq8d9x7_tO_wZ3y4F_u_v8Z9x7_tO_wZ3y4F_u_v8Z=s96-c'
-    }));
+    localStorage.setItem('artvpp-user', JSON.stringify(googleUser));
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('artvpp-user');
   };
 
   // Checkout State

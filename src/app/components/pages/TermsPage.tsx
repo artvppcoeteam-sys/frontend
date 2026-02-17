@@ -2,11 +2,7 @@ import { FileText, Shield, Clock } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { motion } from 'motion/react';
 
-interface TermsPageProps {
-  onNavigate: (page: string, id?: string) => void;
-}
-
-export function TermsPage({ onNavigate }: TermsPageProps) {
+export function TermsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

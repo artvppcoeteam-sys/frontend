@@ -1,60 +1,68 @@
 import {
     User, MapPin, Package, CreditCard, Heart,
-    MessageSquare, Bell, Ticket, LogOut, FileText,
-    HelpCircle, MoreHorizontal
+    MessageSquare, Bell, Ticket, LogOut,
+    MoreHorizontal
 } from 'lucide-react';
 import { cn } from '../ui/utils';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useApp } from '../../context/AppContext';
-import { DashboardSection } from './types';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
-    activeSection: DashboardSection;
-    onNavigate: (section: DashboardSection) => void;
-    className?: string;
+    activeSection: string;
+    basePath?: string;
+    className?: string; // allow overriding classes
+    // Removed onNavigate cause we use proper routing now 
+    // but kept just in case some legacy component tries to pass it
+    onNavigate?: (section: any) => void;
 }
 
-export function Sidebar({ activeSection, onNavigate, className }: SidebarProps) {
+export function Sidebar({ activeSection, basePath = '/dashboard/user', className }: SidebarProps) {
     const { user, logout } = useApp();
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
-    const handleNavigate = (section: DashboardSection) => {
-        onNavigate(section);
+    const handleNavigate = (id: string) => {
+        navigate(`${basePath}/${id}`);
         setIsOpen(false);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
     };
 
     const menuItems = [
         {
             title: 'MY ORDERS',
             items: [
-                { id: 'orders' as const, label: 'Orders List', icon: Package },
+                { id: 'orders', label: 'Orders List', icon: Package },
             ]
         },
         {
             title: 'ACCOUNT SETTINGS',
             items: [
-                { id: 'profile' as const, label: 'Profile Information', icon: User },
-                { id: 'addresses' as const, label: 'Manage Addresses', icon: MapPin },
+                { id: 'profile', label: 'Profile Information', icon: User },
+                { id: 'addresses', label: 'Manage Addresses', icon: MapPin },
 
             ]
         },
         {
             title: 'PAYMENTS',
             items: [
-                { id: 'payments' as const, label: 'Gift Cards, Saved UPI & Cards', icon: CreditCard },
+                { id: 'payments', label: 'Gift Cards, Saved UPI & Cards', icon: CreditCard },
             ]
         },
         {
             title: 'MY STUFF',
             items: [
-                { id: 'coupons' as const, label: 'My Coupons', icon: Ticket },
-                { id: 'reviews' as const, label: 'My Reviews & Ratings', icon: MessageSquare },
-                { id: 'notifications' as const, label: 'All Notifications', icon: Bell },
-                { id: 'wishlist' as const, label: 'My Wishlist', icon: Heart },
+                { id: 'coupons', label: 'My Coupons', icon: Ticket },
+                { id: 'reviews', label: 'My Reviews & Ratings', icon: MessageSquare },
+                { id: 'notifications', label: 'All Notifications', icon: Bell },
+                { id: 'wishlist', label: 'My Wishlist', icon: Heart },
             ]
         }
     ];
@@ -115,7 +123,7 @@ export function Sidebar({ activeSection, onNavigate, className }: SidebarProps) 
                 <Button
                     variant="ghost"
                     className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
-                    onClick={logout}
+                    onClick={handleLogout}
                 >
                     <LogOut className="w-4 h-4" />
                     Logout

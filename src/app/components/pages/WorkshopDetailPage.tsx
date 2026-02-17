@@ -6,13 +6,11 @@ import { Badge } from '../ui/badge';
 import { workshops } from '../../data/mockData';
 import { toast } from 'sonner';
 import { motion } from 'motion/react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-interface WorkshopDetailPageProps {
-  workshopId: string | null;
-  onNavigate: (page: string) => void;
-}
-
-export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPageProps) {
+export function WorkshopDetailPage() {
+  const { id: workshopId } = useParams();
+  const navigate = useNavigate();
   const workshop = workshops.find(w => w.id === workshopId);
   const [seats, setSeats] = useState(1);
 
@@ -21,7 +19,7 @@ export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPag
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Workshop not found</h2>
-          <Button onClick={() => onNavigate('services')}>Back to Services</Button>
+          <Button onClick={() => navigate('/services')}>Back to Services</Button>
         </div>
       </div>
     );
@@ -39,7 +37,7 @@ export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPag
       <div className="bg-gray-50 border-b">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
-            onClick={() => onNavigate('services')}
+            onClick={() => navigate('/services')}
             className="flex items-center gap-2 text-gray-600 hover:text-[#D4AF37] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -57,7 +55,7 @@ export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPag
             className="w-full h-full object-cover opacity-80"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-          
+
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
             <div className="max-w-[1400px] mx-auto">
               <motion.div
@@ -105,8 +103,8 @@ export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPag
                 {workshop.description}
               </p>
               <p className="text-gray-600 font-light leading-relaxed">
-                This workshop is designed to provide you with hands-on experience and practical skills. 
-                Whether you're a beginner or looking to enhance your existing skills, our expert instructor 
+                This workshop is designed to provide you with hands-on experience and practical skills.
+                Whether you're a beginner or looking to enhance your existing skills, our expert instructor
                 will guide you through every step of the creative process.
               </p>
             </motion.div>
@@ -186,8 +184,8 @@ export function WorkshopDetailPage({ workshopId, onNavigate }: WorkshopDetailPag
                         Professional Artist & Educator
                       </p>
                       <p className="text-gray-700 leading-relaxed mb-4">
-                        With over 15 years of experience in the field, our instructor brings a wealth of knowledge 
-                        and practical insights to every workshop. Known for their patient teaching style and ability 
+                        With over 15 years of experience in the field, our instructor brings a wealth of knowledge
+                        and practical insights to every workshop. Known for their patient teaching style and ability
                         to break down complex concepts into easy-to-understand steps.
                       </p>
                       <div className="flex items-center gap-6 text-sm text-gray-600">

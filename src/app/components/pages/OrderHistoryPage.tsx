@@ -6,10 +6,7 @@ import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { motion } from 'motion/react';
 import { useApp } from '../../context/AppContext';
-
-interface OrderHistoryPageProps {
-  onNavigate: (page: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 const mockOrders = [
   {
@@ -62,7 +59,8 @@ const mockOrders = [
   }
 ];
 
-export function OrderHistoryPage({ onNavigate }: OrderHistoryPageProps) {
+export function OrderHistoryPage() {
+  const navigate = useNavigate();
   const { user } = useApp();
   const [selectedTab, setSelectedTab] = useState('all');
 
@@ -110,7 +108,7 @@ export function OrderHistoryPage({ onNavigate }: OrderHistoryPageProps) {
             <CardDescription>Please log in to view your orders</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => onNavigate('login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
+            <Button onClick={() => navigate('/login')} className="w-full bg-[#D4AF37] hover:bg-[#B8941F]">
               Go to Login
             </Button>
           </CardContent>
@@ -219,12 +217,12 @@ export function OrderHistoryPage({ onNavigate }: OrderHistoryPageProps) {
                       <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">No orders found</h3>
                       <p className="text-gray-600 mb-6">
-                        {selectedTab === 'all' 
+                        {selectedTab === 'all'
                           ? "You haven't placed any orders yet"
                           : `No ${selectedTab} orders found`
                         }
                       </p>
-                      <Button onClick={() => onNavigate('shop')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
+                      <Button onClick={() => navigate('/marketplace')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
                         Start Shopping
                       </Button>
                     </div>
@@ -317,16 +315,13 @@ export function OrderHistoryPage({ onNavigate }: OrderHistoryPageProps) {
                                 <div className="flex-1 h-1 bg-green-200" />
                               </div>
                               <div className="flex items-center gap-2 flex-1">
-                                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                                  order.status === 'shipped' ? 'bg-blue-100' : 'bg-gray-100'
-                                }`}>
-                                  <Truck className={`w-5 h-5 ${
-                                    order.status === 'shipped' ? 'text-blue-600' : 'text-gray-400'
-                                  }`} />
+                                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${order.status === 'shipped' ? 'bg-blue-100' : 'bg-gray-100'
+                                  }`}>
+                                  <Truck className={`w-5 h-5 ${order.status === 'shipped' ? 'text-blue-600' : 'text-gray-400'
+                                    }`} />
                                 </div>
-                                <div className={`flex-1 h-1 ${
-                                  order.status === 'shipped' ? 'bg-blue-200' : 'bg-gray-200'
-                                }`} />
+                                <div className={`flex-1 h-1 ${order.status === 'shipped' ? 'bg-blue-200' : 'bg-gray-200'
+                                  }`} />
                               </div>
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100">
@@ -377,7 +372,7 @@ export function OrderHistoryPage({ onNavigate }: OrderHistoryPageProps) {
                   <h3 className="font-semibold text-lg mb-2">Need Help with Your Order?</h3>
                   <p className="text-gray-600">Contact our support team for assistance</p>
                 </div>
-                <Button onClick={() => onNavigate('contact')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
+                <Button onClick={() => navigate('/contact')} className="bg-[#D4AF37] hover:bg-[#B8941F]">
                   Contact Support
                 </Button>
               </div>

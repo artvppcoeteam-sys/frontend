@@ -2,11 +2,7 @@ import { Shield, Lock, Eye, Database, UserCheck, AlertTriangle } from 'lucide-re
 import { Card, CardContent } from '../ui/card';
 import { motion } from 'motion/react';
 
-interface PrivacyPageProps {
-  onNavigate: (page: string, id?: string) => void;
-}
-
-export function PrivacyPage({ onNavigate }: PrivacyPageProps) {
+export function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

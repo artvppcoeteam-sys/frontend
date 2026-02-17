@@ -6,8 +6,13 @@ import { AdminProducts } from './AdminProducts';
 import { AdminUsers } from './AdminUsers';
 import { AdminArtworks } from './AdminArtworks';
 import { AdminServices } from './AdminServices';
+import { AdminOrders } from './AdminOrders';
+import { AdminCategories } from './AdminCategories';
 import { AdminRevenue } from './AdminRevenue';
 import { AdminReports } from './AdminReports';
+import { AdminContent } from './AdminContent';
+import { AdminSettings } from './AdminSettings';
+import { AdminSupport } from './AdminSupport';
 import {
     LayoutDashboard, Users, Store as StoreIcon, Image as ImageIcon,
     FileText, ShoppingBag, Settings, PieChart, Layers, Box,
@@ -25,16 +30,20 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     const { user } = useApp();
     const [activeSection, setActiveSection] = useState('overview');
 
+    // Enforce Admin Access
     if (user?.role !== 'admin') {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <Card className="max-w-md w-full">
                     <CardHeader>
-                        <CardTitle>Access Denied</CardTitle>
+                        <CardTitle className="text-red-600">Access Denied</CardTitle>
                         <CardDescription>This area is restricted to Administrators only.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button onClick={() => onNavigate('home')} className="w-full">
+                        <p className="mb-4 text-sm text-gray-500">
+                            You do not have permission to view this page. Please log in with an administrator account.
+                        </p>
+                        <Button onClick={() => onNavigate('home')} className="w-full bg-[#D4AF37] hover:bg-[#C19B2A]">
                             Return Home
                         </Button>
                     </CardContent>
@@ -91,18 +100,24 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
             case 'vendors': return <AdminVendors />;
             case 'users': return <AdminUsers />;
             case 'artworks': return <AdminArtworks />;
-            case 'orders': return <AdminProducts activeTab="products" />; // Reusing AdminProducts logic for now or specific order view
+            case 'orders': return <AdminOrders />;
 
             // Discover
-            case 'categories': return <AdminProducts activeTab="products" />; // Managing categories often happens with products
+            case 'categories': return <AdminCategories />;
             case 'services': return <AdminServices />;
+
+            // Fallbacks/Legacy
+            case 'products': return <AdminProducts activeTab="products" />;
 
             // Finance
             case 'revenue': return <AdminRevenue />;
             case 'reports': return <AdminReports />;
 
             // Platform
-            case 'content': return <AdminReports />; // Placeholder
+            case 'content': return <AdminContent />;
+            case 'settings': return <AdminSettings />;
+            case 'support': return <AdminSupport />;
+
             default: return <AdminOverview />;
         }
     };

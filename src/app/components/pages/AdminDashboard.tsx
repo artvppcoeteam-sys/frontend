@@ -3,12 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
+import { useNavigate } from 'react-router-dom';
 
-interface AdminDashboardProps {
-  onNavigate: (page: string) => void;
-}
+export function AdminDashboard() {
+  const navigate = useNavigate();
 
-export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   // Mock data for admin dashboard
   const stats = [
     { label: 'Total Revenue', value: '₹2,45,890', change: '+12.5%', icon: DollarSign, color: 'text-green-600' },
@@ -71,7 +70,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               <CardDescription>Add, edit, or remove product categories</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-[#D4AF37] hover:bg-[#C19B2A] text-white">
+              <Button className="w-full bg-[#D4AF37] hover:bg-[#C19B2A] text-white" onClick={() => navigate('/admin/categories')}>
                 Manage Categories
               </Button>
             </CardContent>
@@ -83,7 +82,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               <CardDescription>Review and approve new vendor applications</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-[#8B4049] hover:bg-[#7A3740] text-white">
+              <Button className="w-full bg-[#8B4049] hover:bg-[#7A3740] text-white" onClick={() => navigate('/admin/vendors')}>
                 Review Applications
               </Button>
             </CardContent>
@@ -95,7 +94,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               <CardDescription>Configure platform settings and preferences</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full" variant="outline" onClick={() => navigate('/admin/settings')}>
                 Open Settings
               </Button>
             </CardContent>

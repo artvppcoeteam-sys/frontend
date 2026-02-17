@@ -3,18 +3,16 @@ import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 import { useApp } from '../../context/AppContext';
 import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
-interface CartPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function CartPage({ onNavigate }: CartPageProps) {
+export function CartPage() {
+  const navigate = useNavigate();
   const { cart, updateCartQuantity, removeFromCart, cartTotal } = useApp();
 
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <motion.div 
+        <motion.div
           className="text-center max-w-md px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -33,7 +31,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
           </p>
           <Button
             size="lg"
-            onClick={() => onNavigate('shop')}
+            onClick={() => navigate('/marketplace')}
             className="bg-[#D4AF37] hover:bg-[#C19B2A] text-white"
           >
             Continue Shopping
@@ -184,7 +182,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
                 <Button
                   size="lg"
                   className="w-full bg-[#D4AF37] hover:bg-[#C19B2A] text-white mb-3"
-                  onClick={() => onNavigate('checkout')}
+                  onClick={() => navigate('/checkout')}
                 >
                   Proceed to Checkout
                 </Button>
@@ -193,7 +191,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
                   variant="outline"
                   size="lg"
                   className="w-full"
-                  onClick={() => onNavigate('shop')}
+                  onClick={() => navigate('/marketplace')}
                 >
                   Continue Shopping
                 </Button>

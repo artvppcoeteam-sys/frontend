@@ -10,13 +10,11 @@ import { useApp } from '../../context/AppContext';
 import { allProducts } from '../../data/mockData';
 import { toast } from 'sonner';
 import { motion } from 'motion/react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-interface ProductDetailPageProps {
-  productId: string | null;
-  onNavigate: (page: string, productId?: string) => void;
-}
-
-export function ProductDetailPage({ productId, onNavigate }: ProductDetailPageProps) {
+export function ProductDetailPage() {
+  const { id: productId } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useApp();
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('original');
@@ -31,7 +29,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h2 className="text-3xl font-light mb-6">Artwork not found</h2>
-          <Button onClick={() => onNavigate('shop')} className="bg-gray-900 text-white hover:bg-gray-800">
+          <Button onClick={() => navigate('/marketplace')} className="bg-gray-900 text-white hover:bg-gray-800">
             Back to Collection
           </Button>
         </div>
@@ -67,7 +65,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <Button
             variant="ghost"
-            onClick={() => onNavigate('shop')}
+            onClick={() => navigate('/marketplace')}
             className="font-light hover:text-[#D4AF37]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -79,11 +77,11 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-8 font-light">
-          <button onClick={() => onNavigate('home')} className="hover:text-[#D4AF37] transition-colors">
+          <button onClick={() => navigate('/')} className="hover:text-[#D4AF37] transition-colors">
             Home
           </button>
           <ChevronRight className="w-4 h-4" />
-          <button onClick={() => onNavigate('shop')} className="hover:text-[#D4AF37] transition-colors">
+          <button onClick={() => navigate('/marketplace')} className="hover:text-[#D4AF37] transition-colors">
             Collection
           </button>
           <ChevronRight className="w-4 h-4" />
@@ -251,7 +249,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
                 variant="outline"
                 onClick={() => {
                   handleAddToCart();
-                  onNavigate('checkout');
+                  navigate('/checkout');
                 }}
                 className="w-full border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white py-7 text-lg rounded-xl font-medium tracking-wide"
               >
@@ -386,7 +384,7 @@ export function ProductDetailPage({ productId, onNavigate }: ProductDetailPagePr
               <motion.div
                 key={relatedProduct.id}
                 whileHover={{ y: -8 }}
-                onClick={() => onNavigate('product-detail', relatedProduct.id)}
+                onClick={() => navigate(`/product/${relatedProduct.id}`)}
                 className="group cursor-pointer"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-4">

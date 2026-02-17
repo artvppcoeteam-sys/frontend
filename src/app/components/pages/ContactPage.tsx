@@ -5,11 +5,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 
-interface ContactPageProps {
-  onNavigate?: (page: string) => void;
-}
-
-export function ContactPage({ onNavigate }: ContactPageProps) {
+export function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',

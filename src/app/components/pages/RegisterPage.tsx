@@ -8,12 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Textarea } from '../ui/textarea';
 import { Checkbox } from '../ui/checkbox';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
-interface RegisterPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function RegisterPage({ onNavigate }: RegisterPageProps) {
+export function RegisterPage() {
+  const navigate = useNavigate();
   const [customerData, setCustomerData] = useState({
     name: '',
     email: '',
@@ -45,7 +43,7 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
       return;
     }
     toast.success('Account created successfully!');
-    onNavigate('login');
+    navigate('/login');
   };
 
   const handleVendorRegister = (e: React.FormEvent) => {
@@ -59,7 +57,7 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
       return;
     }
     toast.success('Vendor application submitted! We\'ll review and get back to you within 48 hours.');
-    onNavigate('login');
+    navigate('/login');
   };
 
   return (
@@ -187,7 +185,7 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                     Already have an account?{' '}
                     <button
                       type="button"
-                      onClick={() => onNavigate('login')}
+                      onClick={() => navigate('/login')}
                       className="text-[#D4AF37] hover:underline"
                     >
                       Sign in
@@ -352,7 +350,7 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                     Already registered?{' '}
                     <button
                       type="button"
-                      onClick={() => onNavigate('login')}
+                      onClick={() => navigate('/login')}
                       className="text-[#8B4049] hover:underline"
                     >
                       Sign in

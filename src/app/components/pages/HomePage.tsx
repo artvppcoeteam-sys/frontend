@@ -7,10 +7,7 @@ import { Badge } from '../ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 import { featuredArtworks, categories, featuredArtists } from '../../data/mockData';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
-
-interface HomePageProps {
-  onNavigate: (page: string, productId?: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -29,7 +26,8 @@ const stagger = {
   }
 };
 
-export function HomePage({ onNavigate }: HomePageProps) {
+export function HomePage() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedArtist, setSelectedArtist] = useState<any>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -119,7 +117,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <motion.div variants={fadeIn} className="flex flex-col gap-8 justify-center items-center w-full max-w-lg relative z-10">
                 <Button
                   size="lg"
-                  onClick={() => onNavigate('shop')}
+                  onClick={() => navigate('/marketplace')}
                   className="bg-white text-black hover:bg-gray-100 px-10 py-6 text-base rounded-full font-bold tracking-wide transition-transform hover:scale-105"
                 >
                   SHOP THE COLLECTION
@@ -218,7 +216,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                   key={artwork.id}
                   variants={fadeIn}
                   whileHover={{ y: -10 }}
-                  onClick={() => onNavigate('product-detail', artwork.id)}
+                  onClick={() => navigate(`/product/${artwork.id}`)}
                   className="group cursor-pointer"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-4 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300">
@@ -257,7 +255,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => onNavigate('shop')}
+                onClick={() => navigate('/marketplace')}
                 className="border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white px-12 py-6 text-base rounded-full font-medium tracking-wide"
               >
                 VIEW ALL ARTWORKS
@@ -292,42 +290,42 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 {
                   name: 'Original Art',
                   image: 'https://images.unsplash.com/photo-1610401163940-c7a80f2e1fdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('shop')
+                  onClick: () => navigate('/marketplace')
                 },
                 {
                   name: 'Prints & Reproductions',
                   image: 'https://images.unsplash.com/photo-1768464706302-4876d5be12f2?w=600',
-                  onClick: () => onNavigate('shop')
+                  onClick: () => navigate('/marketplace')
                 },
                 {
                   name: 'Handcrafted Items',
                   image: 'https://images.unsplash.com/photo-1760764541302-e3955fbc6b2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('shop')
+                  onClick: () => navigate('/marketplace')
                 },
                 {
                   name: 'Art Merchandise',
                   image: 'https://images.unsplash.com/photo-1708808607238-e761218b9213?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('shop')
+                  onClick: () => navigate('/marketplace')
                 },
                 {
                   name: 'Digital Art',
                   image: 'https://images.unsplash.com/photo-1652512455891-11933272bc1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('shop')
+                  onClick: () => navigate('/marketplace')
                 },
                 {
                   name: 'Custom Commissions',
                   image: 'https://images.unsplash.com/photo-1615746462903-4416adc45fa5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('services')
+                  onClick: () => navigate('/services')
                 },
                 {
                   name: 'Art Services',
                   image: 'https://images.unsplash.com/photo-1560165143-fa7e2d9e594c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('services')
+                  onClick: () => navigate('/services')
                 },
                 {
                   name: 'Workshops & Classes',
                   image: 'https://images.unsplash.com/photo-1758522274945-7f000385a3dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-                  onClick: () => onNavigate('services')
+                  onClick: () => navigate('/services')
                 },
               ].map((category, index) => (
                 <motion.div
@@ -418,7 +416,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
               <Button
                 size="lg"
-                onClick={() => onNavigate('services')}
+                onClick={() => navigate('/services')}
                 className="bg-[#8B4049] hover:bg-[#7A3840] text-white px-12 py-6 text-base rounded-full font-medium tracking-wide shadow-lg hover:shadow-xl transition-all"
               >
                 BECOME AN ARTIST
@@ -607,7 +605,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button
                 size="lg"
-                onClick={() => onNavigate('shop')}
+                onClick={() => navigate('/marketplace')}
                 className="bg-white text-black hover:bg-gray-100 px-12 py-7 text-lg rounded-full font-medium tracking-wide shadow-lg"
               >
                 BROWSE COLLECTION
@@ -615,7 +613,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => onNavigate('services')}
+                onClick={() => navigate('/services')}
                 className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-12 py-7 text-lg rounded-full font-medium tracking-wide"
               >
                 EXPLORE SERVICES
@@ -714,7 +712,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                   <Button
                     onClick={() => {
                       setSelectedArtist(null);
-                      onNavigate('services');
+                      navigate('/services');
                     }}
                     className="flex-1 bg-gradient-to-r from-[#D4AF37] to-[#C19B2A] hover:from-[#C19B2A] hover:to-[#D4AF37] text-white py-6 text-base rounded-none font-medium"
                   >
