@@ -58,8 +58,8 @@ export function Header() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-[1800px] mx-auto px-4 md:px-6 lg:px-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 items-center">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 items-center h-16">
 
           {/* Logo Section - Left */}
           <div className="flex items-center justify-start">
@@ -72,16 +72,16 @@ export function Header() {
               <img
                 src={logo}
                 alt="ARTVPP"
-                className="h-16 md:h-20 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                className="h-8 md:h-10 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
               />
-              <span className="text-lg font-sans text-black font-normal tracking-wide hidden md:block">
+              <span className="text-base font-sans text-black font-normal tracking-wide hidden md:block">
                 ArtVPP
               </span>
             </motion.button>
           </div>
 
           {/* Center Navigation - Center */}
-          <nav className="hidden md:flex items-center justify-center gap-10 lg:gap-12">
+          <nav className="hidden md:flex items-center justify-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <div
                 key={item.value}
@@ -96,9 +96,9 @@ export function Header() {
                       setActiveDropdown(null);
                     }
                   }}
-                  className="flex flex-col items-center py-2"
+                  className="flex flex-col items-center py-1"
                 >
-                  <span className={`text-sm lg:text-base font-medium tracking-widest uppercase transition-colors whitespace-nowrap ${isActive(item.path) || (activeDropdown === item.value)
+                  <span className={`text-xs lg:text-sm font-medium tracking-widest uppercase transition-colors whitespace-nowrap ${isActive(item.path) || (activeDropdown === item.value)
                     ? 'text-[#D4AF37]'
                     : 'text-gray-900 hover:text-[#D4AF37]'
                     }`}>
@@ -181,8 +181,8 @@ export function Header() {
           </nav>
 
           {/* Right Actions - Right */}
-          <div className="flex items-center justify-end gap-4 lg:gap-6 text-sm lg:text-base font-medium tracking-widest">
-            <div className="hidden md:flex items-center gap-4 lg:gap-6">
+          <div className="flex items-center justify-end gap-3 lg:gap-4 text-xs lg:text-sm font-medium tracking-widest">
+            <div className="hidden md:flex items-center gap-3 lg:gap-4">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -222,9 +222,9 @@ export function Header() {
 
               <button onClick={() => navigate('/cart')} className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors uppercase group whitespace-nowrap">
                 <div className="relative">
-                  <ShoppingCart className="w-5 h-5 text-gray-800 group-hover:text-[#D4AF37] transition-colors" />
+                  <ShoppingCart className="w-4 h-4 text-gray-800 group-hover:text-[#D4AF37] transition-colors" />
                   {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#8B4049] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
+                    <span className="absolute -top-2 -right-2 bg-[#8B4049] text-white text-[9px] w-3 h-3 flex items-center justify-center rounded-full font-bold">
                       {cartCount}
                     </span>
                   )}

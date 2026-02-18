@@ -23,7 +23,7 @@ export function Footer() {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           initial="hidden"
@@ -47,8 +47,8 @@ export function Footer() {
             }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="ARTVPP" className="h-14 w-auto" />
-              <span className="text-2xl font-bold tracking-tight font-serif text-white">ARTVPP</span>
+              <img src={logo} alt="ARTVPP" className="h-10 w-auto" />
+              <span className="text-xl font-bold tracking-tight font-serif text-white">ARTVPP</span>
             </div>
             <p className="text-sm text-gray-400 mb-6">
               Your premier destination for original art, prints, and creative services.
